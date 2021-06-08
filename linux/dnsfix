@@ -1,0 +1,10 @@
+
+IF=$1
+if [[ "$IF" =~ ^en ]] || [[ "$IF" =~ ^wl ]]; then
+    VAR=$(ifconfig ${IF} | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1')
+
+    echo "nameserver ${VAR}" > /etc/resolv.conf
+    echo "nameserver 8.8.8.8" >> /etc/resolv.conf
+
+    systemctl restart dnsmasq
+fi
